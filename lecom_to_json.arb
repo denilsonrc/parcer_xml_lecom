@@ -1,0 +1,98 @@
+require "crack"
+require "json"
+require "csv"
+
+xml_banco                = Crack::XML.parse(File.read("modelo_000000_0_Banco.xml"))            # query do banco salva - beans.BancoVO
+xml_etapa_campo_1        = Crack::XML.parse(File.read("modelo_000000_0_EC__1.xml"))            # etapa campo - beans.EtapaCampoVO - limite de 500 registros
+xml_etapa_campo_2        = Crack::XML.parse(File.read("modelo_000000_0_EC__2.xml"))            # etapa campo - beans.EtapaCampoVO - limite de 500 registros
+xml_etapa_campo_3        = Crack::XML.parse(File.read("modelo_000000_0_EC__3.xml"))            # etapa campo - beans.EtapaCampoVO - limite de 500 registros
+xml_etapa_campo_4        = Crack::XML.parse(File.read("modelo_000000_0_EC__4.xml"))            # etapa campo - beans.EtapaCampoVO - limite de 500 registros
+xml_etapa_campo_5        = Crack::XML.parse(File.read("modelo_000000_0_EC__5.xml"))            # etapa campo - beans.EtapaCampoVO - limite de 500 registros
+xml_etapa_campo_6        = Crack::XML.parse(File.read("modelo_000000_0_EC__6.xml"))            # etapa campo - beans.EtapaCampoVO - limite de 500 registros
+xml_etapa_campo_7        = Crack::XML.parse(File.read("modelo_000000_0_EC__7.xml"))            # etapa campo - beans.EtapaCampoVO - limite de 500 registros
+xml_etapa_campo_8        = Crack::XML.parse(File.read("modelo_000000_0_EC__8.xml"))            # etapa campo - beans.EtapaCampoVO - limite de 500 registros
+xml_etapa                = Crack::XML.parse(File.read("modelo_000000_0_E.xml"))                # etapa - beans.EtapaVO
+xml_campo                = Crack::XML.parse(File.read("modelo_000000_0_C.xml"))                # campo - beans.CampoVO
+xml_etapa_campo_associar = Crack::XML.parse(File.read("modelo_000000_0_ECAss.xml"))            # associar campo a etapa - beans.EtapaCampoAssociarVO
+xml_etapa_campo_lupa     = Crack::XML.parse(File.read("modelo_000000_0_ECL.xml"))              # lupa campo a etapa - beans.EtapaCampoLupaVO
+xml_etapa_campo_refrsh   = Crack::XML.parse(File.read("modelo_000000_0_ECR.xml"))              # etapa campo refresh - beans.EtapaCampoRefrshVO
+xml_etapa_javascript     = Crack::XML.parse(File.read("modelo_000000_0_EtapaJavascripts.xml")) # etapa javascripts - beans.JavascriptVO
+xml_formulario           = Crack::XML.parse(File.read("modelo_000000_0_F.xml"))                # formulario (nao tem lista) - beans.FormularioVO
+xml_formulario_grupo     = Crack::XML.parse(File.read("modelo_000000_0_FG.xml"))               # formulario grupo - beans.FormularioGrupoVO
+xml_fields_groupings     = Crack::XML.parse(File.read("modelo_000000_0_Fields_Groupings.xml")) # lista de fields - linked-list
+xml_formulario_template  = Crack::XML.parse(File.read("modelo_000000_0_FTe.xml"))              # formulario template - beans.FormularioTemplateVO
+xml_formulario_usuario   = Crack::XML.parse(File.read("modelo_000000_0_FU.xml"))               # formulario usuario - beans.FormularioUsuarioVO
+xml_integracao           = Crack::XML.parse(File.read("modelo_000000_0_I.xml"))                # Integracao - beans.IntegracaoVO
+xml_lecom_formulario     = Crack::XML.parse(File.read("modelo_000000_0_LF.xml"))               # Formulario base dados - br.com.lecom.workflow.domains.helpers.Formulario
+xml_doc_templates        = Crack::XML.parse(File.read("modelo_000000_0_Tem.xml"))             # Templates de documentos - br.com.docsys.ecm.client.dto.template.DocTemplate
+xml_acc_group            = Crack::XML.parse(File.read("modelo_000000_0_AccGroup.xml"))         # Template access group - br.com.docsys.ecm.client.dto.GroupDocTemplateAccess
+xml_access_profile       = Crack::XML.parse(File.read("modelo_000000_0_AccProfile.xml"))       # Template access profile - br.com.docsys.ecm.client.dto.ProfileDocTemplateAccess
+
+def verifica_quantidade(xml, label)
+    if (!xml["list"].nil? and !xml["list"][label].nil?)
+        puts "#{label}: #{xml["list"][label].count}"
+    else
+        puts "#{label}: 1"
+    end
+end
+
+verifica_quantidade(xml_banco,"beans.BancoVO")               
+verifica_quantidade(xml_etapa_campo_1,"beans.EtapaCampoVO")       
+verifica_quantidade(xml_etapa_campo_2,"beans.EtapaCampoVO")       
+verifica_quantidade(xml_etapa_campo_3,"beans.EtapaCampoVO")       
+verifica_quantidade(xml_etapa_campo_4,"beans.EtapaCampoVO")       
+verifica_quantidade(xml_etapa_campo_5,"beans.EtapaCampoVO")       
+verifica_quantidade(xml_etapa_campo_6,"beans.EtapaCampoVO")       
+verifica_quantidade(xml_etapa_campo_7,"beans.EtapaCampoVO")       
+verifica_quantidade(xml_etapa_campo_8,"beans.EtapaCampoVO")
+verifica_quantidade(xml_campo,"beans.CampoVO")       
+verifica_quantidade(xml_etapa,"beans.EtapaVO")               
+verifica_quantidade(xml_etapa_campo_associar,"beans.EtapaCampoAssociarVO")
+verifica_quantidade(xml_etapa_campo_lupa,"beans.EtapaCampoLupaVO")
+verifica_quantidade(xml_etapa_campo_refrsh,"beans.EtapaCampoRefrshVO")
+verifica_quantidade(xml_etapa_javascript,"beans.JavascriptVO")
+verifica_quantidade(xml_formulario,"beans.FormularioVO")
+verifica_quantidade(xml_formulario_grupo,"beans.FormularioGrupoVO")
+verifica_quantidade(xml_fields_groupings,"fields_groupings")
+verifica_quantidade(xml_formulario_template,"beans.FormularioTemplateVO")
+verifica_quantidade(xml_formulario_usuario,"beans.FormularioUsuarioVO")
+verifica_quantidade(xml_integracao,"beans.IntegracaoVO")
+verifica_quantidade(xml_lecom_formulario,"br.com.lecom.workflow.domains.helpers.Formulario")
+verifica_quantidade(xml_doc_templates,"br.com.docsys.ecm.client.dto.template.DocTemplate")
+verifica_quantidade(xml_acc_group,"br.com.docsys.ecm.client.dto.GroupDocTemplateAccess")
+verifica_quantidade(xml_access_profile,"br.com.docsys.ecm.client.dto.ProfileDocTemplateAccess")
+
+formulario  = xml_formulario["beans.FormularioVO"] 
+etapa_campo = []   
+etapa_campo = xml_etapa_campo_1["list"]["beans.EtapaCampoVO"] + 
+              xml_etapa_campo_2["list"]["beans.EtapaCampoVO"] + 
+              xml_etapa_campo_3["list"]["beans.EtapaCampoVO"] + 
+              xml_etapa_campo_4["list"]["beans.EtapaCampoVO"] + 
+              xml_etapa_campo_5["list"]["beans.EtapaCampoVO"] + 
+              xml_etapa_campo_6["list"]["beans.EtapaCampoVO"] + 
+              xml_etapa_campo_7["list"]["beans.EtapaCampoVO"] + 
+              xml_etapa_campo_8["list"]["beans.EtapaCampoVO"]
+
+etapa = xml_etapa["list"]["beans.EtapaVO"]
+campo = xml_campo["list"]["beans.CampoVO"]
+
+headers = ["id_campo","descricao_campo","label_campo","campo_dinamico","id_etapa","etapa_descricao","codigo_grafico","ide_aplicacao_externa","ide_inicializa","ide_lupa","ide_refresh","vlr_valor"]
+file = "export_etapa_campos_v1.csv"
+
+CSV.open(file, "w", write_headers: true, headers: headers, col_sep: ",") do |writer|
+    etapa_campo.map{|ec|
+    if (!ec["id"].nil? and !ec["id"]["codForm"].nil? and ec["id"]["codForm"].to_s == formulario["id"]["codForm"].to_s and ec["id"]["codVersion"].to_s == formulario["id"]["codVersion"].to_s)
+        etapa.map{|e|
+            if (e["id"]["codEtapa"] == ec["id"]["codEtapa"] and e["id"]["codForm"] == ec["id"]["codForm"])
+                campo.map{|c|
+                    dynamic_field = c["campoDinamico"]["nomeCampo"]
+                    if(ec["id"]["codCampo"] == c["id"]["codCampo"] and ec["id"]["codForm"] == c["id"]["codForm"])
+                        writer << [ec["id"]["codCampo"], c["desNome"], c["desLabel"],dynamic_field, ec["id"]["codEtapa"],e["desEtapa"], ec["codigoGrafico"], ec["ideAplicacaoExterna"], ec["ideInicializa"], ec["ideLupa"], ec["ideRefresh"], ec["vlrValor"]] 
+                    end
+                }
+            end
+        }
+        end
+    }
+end
+
